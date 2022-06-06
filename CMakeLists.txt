@@ -9,8 +9,26 @@ find_package(geometry_msgs REQUIRED)
 find_package(geographic_msgs REQUIRED)
 find_package(eigen_ros2 REQUIRED)
 
+find_package(rclcpp REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_sensor_msgs REQUIRED)
+find_package(rclpy REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(image_transport REQUIRED)
+find_package(cv_bridge REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(tf2_sensor_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(mavros_msgs REQUIRED)
+find_package(std_srvs REQUIRED)
+find_package(rosidl_typesupport_cpp REQUIRED)
+find_package(rosidl_default_runtime REQUIRED)
+find_package(OpenCV REQUIRED)
+
 # Msg/Srv generation
-rosidl_generate_interfaces(${PROJECT_NAME}_interface
+rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/GimbalAngleEulerCmd.msg"
   "msg/GimbalAngleQuatCmd.msg"
   "msg/GPSYaw.msg"
@@ -29,6 +47,9 @@ rosidl_generate_interfaces(${PROJECT_NAME}_interface
   "srv/SetLocalPosition.srv" DEPENDENCIES std_msgs geometry_msgs geographic_msgs
 )
 
+# ros humble
+rosidl_get_typesupport_target(airsim_interface ${PROJECT_NAME} "rosidl_typesupport_cpp")
+
 # third party dependency build
 add_subdirectory(thirdparty)
 
@@ -42,13 +63,48 @@ set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -Wnoexcept -Wstrict-null-sentinel -Wno-un
 
 # Now interface library between AirSim builded. -> Target : AirLib, MavLinkComLib
 
-add_library(airsim_settings_parser 
+# add_library(airsim_settings_parser 
+#   src/airsim_settings_parser.cpp
+# )
+# target_link_libraries(airsim_settings_parser 
+#   AirLib
+#   MavLinkComLib
+# )
+
+add_executable(airsim_node
   src/airsim_settings_parser.cpp
+  src/airsim_ros_wrapper.cpp
+  src/airsim_node.cpp
 )
-target_link_libraries(airsim_settings_parser 
+target_include_directories(airsim_node PRIVATE
+  ${OpenCV_INCLUDE_DIRS}
+)
+target_link_libraries(airsim_node
+  yaml-cpp
   AirLib
   MavLinkComLib
+  "${airsim_interface}"
+)
+ament_target_dependencies(airsim_node 
+  rclcpp
+  sensor_msgs
+  geometry_msgs
+  nav_msgs
+  image_transport
+  tf2_ros
+  cv_bridge
+  std_srvs
+  tf2_geometry_msgs
+  tf2_sensor_msgs
 )
 
+# in, Humble Depreciated
+# rosidl_target_interfaces(airsim_node
+#    ${PROJECT_NAME} "rosidl_typesupport_cpp"
+# )
+
+install(TARGETS airsim_node
+  DESTINATION lib/${PROJECT_NAME})
+install(DIRECTORY launch rviz DESTINATION share/${PROJECT_NAME})
 
 ament_package()
