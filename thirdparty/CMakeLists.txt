@@ -15,6 +15,7 @@ set(CMAKE_CXX_FLAGS "\
 -Wno-deprecated-copy \
 -Wno-stringop-truncation \
 -Wno-unused-result \
+-fPIC  \
 ${CMAKE_CXX_FLAGS}")
 #rpclib settings
 add_subdirectory(rpclib-2.3.0)

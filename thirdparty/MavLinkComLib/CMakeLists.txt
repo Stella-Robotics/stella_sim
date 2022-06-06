@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 project(MavLinkComLib)
 
-# add_subdirectory("MavLinkTest")
 add_library(MavLinkComLib STATIC
   common_utils/FileSystem.cpp
   common_utils/ThreadUtils.cpp
@@ -33,25 +32,7 @@ add_library(MavLinkComLib STATIC
   src/impl/linux/MavLinkFindSerialPorts.cpp
 )
 
-target_include_directories(MavLinkComLib PRIVATE
+target_include_directories(MavLinkComLib PUBLIC
     include
     common_utils
 )
-
-# install(TARGETS ${PROJECT_NAME} DESTINATION lib EXPORT "export_${PROJECT_NAME}")
-# install(DIRECTORY include/
-#   DESTINATION include/${PROJECT_NAME}
-#   FILES_MATCHING
-#   PATTERN "*.h"
-#   PATTERN "*.hpp"
-#   PATTERN "*.inl"
-#   PATTERN "*.in" EXCLUDE)
-
-# install(TARGETS MavLinkComLib DESTINATION lib EXPORT "export_MavLinkComLib")
-# install(DIRECTORY include/
-#   DESTINATION include/MavLinkComLib
-#   FILES_MATCHING
-#   PATTERN "*.h"
-#   PATTERN "*.hpp"
-#   PATTERN "*.inl"
-#   PATTERN "*.in" EXCLUDE)

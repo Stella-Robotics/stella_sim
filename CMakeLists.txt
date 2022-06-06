@@ -38,26 +38,17 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -Wnoexcept -Wstrict-null-sentinel -Wno-unused-variable -Wno-deprecated-copy -Wno-class-memaccess -fPIC")
 
-# Now interface library between AirSim builded. -> Target : AirLib
-# MavLinkCom
+# Now interface library between AirSim builded. -> Target : AirLib, MavLinkComLib
 
-add_library(test_lib 
-  src/test.cpp
+add_library(airsim_settings_parser 
+  src/airsim_settings_parser.cpp
 )
-
-target_link_libraries(test_lib 
+target_link_libraries(airsim_settings_parser 
   AirLib
   MavLinkComLib
 )
-
-
-# add_library(airsim_settings_parser 
-#   src/airsim_settings_parser.cpp
-# )
-# target_link_libraries(airsim_settings_parser 
-#   AirLib
-# )
 
 
 ament_package()
