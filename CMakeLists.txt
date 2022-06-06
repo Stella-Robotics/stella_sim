@@ -47,8 +47,16 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "srv/SetLocalPosition.srv" DEPENDENCIES std_msgs geometry_msgs geographic_msgs
 )
 
-# ros humble
-rosidl_get_typesupport_target(airsim_interface ${PROJECT_NAME} "rosidl_typesupport_cpp")
+if(DEFINED ENV{ROS_DISTRO})
+    message(status "ROS_DISTRO is" $ENV{ROS_DISTRO})
+    if("$ENV{ROS_DISTRO}" STREQUAL "humble")
+          set(USE_TYPESUPPORT_TARGET 1)
+    endif()
+endif()
+
+if(DEFINED USE_TYPESUPPORT_TARGET)
+  rosidl_get_typesupport_target(airsim_interface ${PROJECT_NAME} "rosidl_typesupport_cpp")
+endif()
 
 # third party dependency build
 add_subdirectory(thirdparty)
@@ -98,10 +106,10 @@ ament_target_dependencies(airsim_node
   tf2_sensor_msgs
 )
 
-# in, Humble Depreciated
-# rosidl_target_interfaces(airsim_node
-#    ${PROJECT_NAME} "rosidl_typesupport_cpp"
-# )
+if(NOT DEFINED USE_TYPESUPPORT_TARGET)
+  rosidl_target_interfaces(airsim_node
+    ${PROJECT_NAME} "rosidl_typesupport_cpp")
+endif()
 
 install(TARGETS airsim_node
   DESTINATION lib/${PROJECT_NAME})
