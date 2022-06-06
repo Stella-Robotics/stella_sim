@@ -18,5 +18,5 @@ set(CMAKE_CXX_FLAGS "\
 ${CMAKE_CXX_FLAGS}")
 #rpclib settings
 add_subdirectory(rpclib-2.3.0)
-add_subdirectory(MavLinkCom)
+add_subdirectory(MavLinkComLib)
 add_subdirectory(AirLib)

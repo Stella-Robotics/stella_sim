@@ -16,7 +16,6 @@ add_library(${PROJECT_NAME} STATIC ${${PROJECT_NAME}_sources})
 target_link_libraries(${PROJECT_NAME} PUBLIC
     eigen_ros2::eigen_ros2
     rpc
-    # MavlinkCom
 )
 
 target_include_directories(${PROJECT_NAME} PUBLIC

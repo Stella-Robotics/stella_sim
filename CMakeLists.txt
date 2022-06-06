@@ -9,13 +9,6 @@ find_package(geometry_msgs REQUIRED)
 find_package(geographic_msgs REQUIRED)
 find_package(eigen_ros2 REQUIRED)
 
-
-# compiler settings
-set(CMAKE_CXX_STANDARD 14)
-if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-  add_compile_options(-Wall -Wextra -Wpedantic)
-endif()
-
 # Msg/Srv generation
 rosidl_generate_interfaces(${PROJECT_NAME}_interface
   "msg/GimbalAngleEulerCmd.msg"
@@ -38,7 +31,33 @@ rosidl_generate_interfaces(${PROJECT_NAME}_interface
 
 # third party dependency build
 add_subdirectory(thirdparty)
-# Now 
-# 
+
+# compiler settings for main applications
+set(CMAKE_CXX_STANDARD 14)
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+
+# Now interface library between AirSim builded. -> Target : AirLib
+# MavLinkCom
+
+add_library(test_lib 
+  src/test.cpp
+)
+
+target_link_libraries(test_lib 
+  AirLib
+  MavLinkComLib
+)
+
+
+# add_library(airsim_settings_parser 
+#   src/airsim_settings_parser.cpp
+# )
+# target_link_libraries(airsim_settings_parser 
+#   AirLib
+# )
+
 
 ament_package()
