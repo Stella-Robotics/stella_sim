@@ -32,8 +32,9 @@ Tested env list
 4) set WSL_HOST_IP (if you are using WSL2)
 ``` bash
     export WSL_HOST_IP=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}')
+    source your_ros2_workspace/install/local_setup.bash
     ros2 launch stella_sim airsim_node.launch.py host:=$WSL_HOST_IP
-
+    ros2 launch stella_sim rviz.launch.py
 ```
 
 
